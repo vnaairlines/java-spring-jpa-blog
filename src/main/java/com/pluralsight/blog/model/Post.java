@@ -10,6 +10,10 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    private Category category;
+
     private String title;
     private String lead;
     @Column(length=1000000)
@@ -31,6 +35,14 @@ public class Post {
         this.body = body;
         this.author = author;
         this.date = date;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Long getId() {

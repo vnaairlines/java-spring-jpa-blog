@@ -17,14 +17,19 @@ public class BlogController {
 
     private PostRepository postRepository;
 
-    public BlogController(PostRepository postRepository) {
+    private CategoryRepository categoryRepository;
+
+    public BlogController(PostRepository postRepository, CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @RequestMapping("/")
     public String listPosts(ModelMap modelMap) {
         List<Post> posts = postRepository.findAll();
         modelMap.put("posts", posts);
+        List<Category> categories = categoryRepository.findAll();
+        modelMap.put("categories", categories);
         return "home";
     }
 
@@ -34,4 +39,15 @@ public class BlogController {
         modelMap.put("post", post);
         return "post-details";
     }
+
+    @RequestMapping("/category/{id}")
+    public String categoryList(@PathVariable Long id, ModelMap modelMap)
+    {
+        Category category = categoryRepository.findById(id).orElse(null);
+        modelMap.put("category", category);
+        List<Post> posts = postRepository.findByCategory(category);
+        modelMap.put("posts", posts);
+        return "category-list";
+    }
+
 }
